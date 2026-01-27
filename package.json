@@ -2,7 +2,8 @@
   "name": "use-navigation-api-monorepo",
   "private": true,
   "workspaces": [
-    "packages/*"
+    "packages/use-navigation-api",
+    "packages/tests"
   ],
   "scripts": {
     "build": "npm run build --workspaces --if-present",

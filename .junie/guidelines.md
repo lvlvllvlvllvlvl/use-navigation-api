@@ -14,7 +14,7 @@ erring towards more verbose output to avoid missing important information when r
 #### Development Workflow
 
 Always use `npm` from the root of the monorepo. To run a command for a single package, add a `--workspace <package>`
-parameter.
+parameter. Always rebuild the project before running tests.
 
 - **Build the project:**
   ```bash

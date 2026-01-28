@@ -1,11 +1,7 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 
 test("should load the app without errors", async ({ page }) => {
-  const errors = [];
-  page.on("pageerror", (error) => errors.push(error));
   await page.goto("/");
-  console.log("Page content:", await page.content());
-  expect(errors).toEqual([]);
 });
 
 test("should display the current navigation url in the app ui", async ({

@@ -43,8 +43,9 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: {
     /* Use preview mode for tests to allow concurrent use of the dev server */
-    command: "npm run preview",
-    url: "http://localhost:4173",
+    command: "npm run preview --workspace tests",
+    url: "http://localhost:4173/default",
     reuseExistingServer: !process.env.CI,
+    timeout: 10000,
   },
 });

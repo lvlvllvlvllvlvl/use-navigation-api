@@ -3,6 +3,7 @@ import {
   createElement,
   type ReactNode,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -33,17 +34,32 @@ export const NavigationProvider = ({
   const [scope, setScope] = useState<HTMLDivElement | null>(null);
   const [state, setState] = useState(defaultValue);
 
-  navigation?.addEventListener("navigate", (event) => {
-    if (!event.canIntercept || event.downloadRequest) {
-      return;
-    }
-    if (scoped && scope) {
-      if (!scope.contains(event.sourceElement)) return;
-    }
+  useEffect(() => {
+    const handler = (event: NavigateEvent) => {
+      if (!event.canIntercept || event.downloadRequest) {
+        return;
+      }
+      if (scoped && scope) {
+        if (
+          !event.sourceElement ||
+          !(event.sourceElement instanceof Element) ||
+          !scope.contains(event.sourceElement)
+        ) {
+          return;
+        }
+      }
 
-    const url = event.destination.url;
-    setState({ navigation, url, info: event.info });
-  });
+      const url = event.destination.url;
+      event.intercept({
+        async handler() {
+          setState({ navigation, url, info: event.info });
+        },
+      });
+    };
+
+    navigation?.addEventListener("navigate", handler);
+    return () => navigation?.removeEventListener("navigate", handler);
+  }, [navigation, scoped, scope]);
 
   return createElement(
     NavigationContext.Provider,

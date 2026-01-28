@@ -1,6 +1,7 @@
 import {
   createContext,
   createElement,
+  type FC,
   type ReactNode,
   useContext,
   useEffect,
@@ -21,33 +22,40 @@ export const useNavigation = () => {
   if (context) return context;
 };
 
-export const NavigationProvider = ({
-  children,
-  store = "url",
-  scoped,
-}: {
+function defaultShouldHandle(event: NavigateEvent) {
+  return event.canIntercept && !event.downloadRequest;
+}
+
+type ShouldHandle = typeof defaultShouldHandle;
+
+export const NavigationProvider: FC<{
   children: ReactNode;
   store?: "url" | "hash" | "memory";
   scoped?: boolean;
+  shouldHandle?: ShouldHandle;
+}> = ({
+  children,
+  store = "url",
+  scoped,
+  shouldHandle = defaultShouldHandle,
 }) => {
   const navigation =
     store === "url" || store === "memory" ? window.navigation : undefined;
   const [scope, setScope] = useState<HTMLDivElement | null>(null);
   const [state, setState] = useState(defaultValue);
+  const skip = useMemo(
+    () => (event: NavigateEvent) => {
+      const target = event.sourceElement;
+      if (scope && target && !scope.contains(target)) return true;
+      return !shouldHandle(event);
+    },
+    [shouldHandle, scope],
+  );
 
   useEffect(() => {
     const handler = (event: NavigateEvent) => {
-      if (!event.canIntercept || event.downloadRequest) {
+      if (skip(event)) {
         return;
-      }
-      if (scoped && scope) {
-        if (
-          !event.sourceElement ||
-          !(event.sourceElement instanceof Element) ||
-          !scope.contains(event.sourceElement)
-        ) {
-          return;
-        }
       }
 
       let url = event.destination.url;
@@ -77,7 +85,7 @@ export const NavigationProvider = ({
 
     navigation?.addEventListener("navigate", handler);
     return () => navigation?.removeEventListener("navigate", handler);
-  }, [navigation, scoped, scope, store]);
+  }, [skip, navigation, scoped, store]);
 
   return createElement(
     NavigationContext.Provider,

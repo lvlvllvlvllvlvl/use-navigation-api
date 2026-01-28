@@ -5,10 +5,10 @@ test("should intercept navigation within the scoped element", async ({
 }) => {
   await page.goto("/scoped");
 
-  await page.click("#link-page1");
+  await page.click("#link-products");
 
   // URL in browser should change
-  await expect(page).toHaveURL(/\/page1$/);
+  await expect(page).toHaveURL(/\/products$/);
 
   // useLocation should reflect the change
   const urlElement = page.locator("#navigation-url");

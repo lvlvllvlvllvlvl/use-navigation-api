@@ -34,3 +34,12 @@ test("should return null for missing query parameter", async ({ page }) => {
   const paramElement = page.locator("#query-param-missing");
   await expect(paramElement).toHaveText("null");
 });
+
+test("should handle relative links correctly", async ({ page }) => {
+  await page.goto("/default");
+  await page.locator("#link-products").click();
+  await expect(page.locator("#navigation-url")).toContainText("/products");
+
+  await page.locator("#link-edit-relative").click();
+  await expect(page.locator("#navigation-url")).toContainText("/edit");
+});

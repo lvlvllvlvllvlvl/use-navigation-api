@@ -14,6 +14,9 @@ function App() {
         Test Param: <code id="query-param-test">{testParam}</code>
       </p>
       <p>
+        View Param: <code id="query-param-view">{useQueryParam("view")}</code>
+      </p>
+      <p>
         Multi Param: <code id="query-param-multi">{multiParam.join(",")}</code>
       </p>
       <p>
@@ -21,14 +24,20 @@ function App() {
         <code id="query-param-missing">{String(useQueryParam("missing"))}</code>
       </p>
       <nav>
-        <a href="/page1" id="link-page1">
-          Page 1
+        <a href="/products" id="link-products">
+          Products
         </a>
-        <a href="/page2" id="link-page2">
-          Page 2
+        <a href="/categories" id="link-categories">
+          Categories
         </a>
-        <a href="?page=3" id="link-param">
-          Page 3
+        <a href="/settings/profile" id="link-settings-profile">
+          Profile Settings
+        </a>
+        <a href="?view=details" id="link-view-details">
+          View Details
+        </a>
+        <a href="edit" id="link-edit-relative">
+          Edit (relative)
         </a>
       </nav>
     </>

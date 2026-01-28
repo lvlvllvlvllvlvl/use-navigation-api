@@ -50,10 +50,22 @@ export const NavigationProvider = ({
         }
       }
 
-      const url = event.destination.url;
+      let url = event.destination.url;
       if (store === "memory") {
         event.preventDefault();
-        setState((prev) => ({ ...prev, url, info: event.info }));
+
+        setState((prev) => {
+          if (
+            event.sourceElement instanceof HTMLAnchorElement &&
+            event.navigationType === "push"
+          ) {
+            const href = event.sourceElement.getAttribute("href");
+            if (href && !href.startsWith("/") && !/^[a-z]+:\/\//i.test(href)) {
+              url = new URL(href, prev.url).href;
+            }
+          }
+          return { ...prev, url, info: event.info };
+        });
       } else {
         event.intercept({
           async handler() {

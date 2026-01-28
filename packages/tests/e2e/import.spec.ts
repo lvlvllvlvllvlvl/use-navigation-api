@@ -1,7 +1,18 @@
 import { test, expect } from "@playwright/test";
 
-test("should display the navigation url in the app ui", async ({ page }) => {
+test("should load the app without errors", async ({ page }) => {
+  const errors = [];
+  page.on("pageerror", (error) => errors.push(error));
+  await page.goto("/");
+  console.log("Page content:", await page.content());
+  expect(errors).toEqual([]);
+});
+
+test("should display the current navigation url in the app ui", async ({
+  page,
+}) => {
   await page.goto("/");
   const urlElement = page.locator("#navigation-url");
-  await expect(urlElement).toHaveText("https://example.com/");
+  const currentUrl = page.url();
+  await expect(urlElement).toHaveText(currentUrl);
 });

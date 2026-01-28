@@ -7,6 +7,10 @@ This is a monorepo containing the following packages:
 - `packages/use-navigation-api`: The core library providing react hooks for the browser's Navigation API.
 - `packages/tests`: A React-based test app and Playwright E2E test suite to verify the library's functionality.
 
+This testing setup allows testing both the build process and the browser integration.
+Test configuration is optimized for cli use. Test output should attempt to balance conciseness with clarity,
+erring towards more verbose output to avoid missing important information when running on a ci server.
+
 #### Development Workflow
 
 Always use `npm` from the root of the monorepo. To run a command for a single package, add a `--workspace <package>`

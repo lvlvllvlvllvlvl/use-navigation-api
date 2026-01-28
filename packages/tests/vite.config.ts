@@ -11,6 +11,7 @@ export default defineConfig({
         default: fileURLToPath(new URL("default.html", import.meta.url)),
         scoped: fileURLToPath(new URL("scoped.html", import.meta.url)),
         memory: fileURLToPath(new URL("memory.html", import.meta.url)),
+        nested: fileURLToPath(new URL("nested.html", import.meta.url)),
       },
     },
   },

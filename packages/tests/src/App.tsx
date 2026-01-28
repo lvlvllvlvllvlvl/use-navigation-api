@@ -4,11 +4,11 @@ function App() {
   const { url } = useLocation();
 
   return (
-    <div>
+    <>
       <p>
         URL: <code id="navigation-url">{url}</code>
       </p>
-    </div>
+    </>
   );
 }
 

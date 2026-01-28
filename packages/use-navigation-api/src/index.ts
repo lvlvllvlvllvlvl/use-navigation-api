@@ -30,7 +30,8 @@ export const NavigationProvider = ({
   store?: "url" | "hash" | "memory";
   scoped?: boolean;
 }) => {
-  const navigation = store === "url" ? window.navigation : undefined;
+  const navigation =
+    store === "url" || store === "memory" ? window.navigation : undefined;
   const [scope, setScope] = useState<HTMLDivElement | null>(null);
   const [state, setState] = useState(defaultValue);
 
@@ -50,16 +51,21 @@ export const NavigationProvider = ({
       }
 
       const url = event.destination.url;
-      event.intercept({
-        async handler() {
-          setState({ navigation, url, info: event.info });
-        },
-      });
+      if (store === "memory") {
+        event.preventDefault();
+        setState((prev) => ({ ...prev, url, info: event.info }));
+      } else {
+        event.intercept({
+          async handler() {
+            setState({ navigation, url, info: event.info });
+          },
+        });
+      }
     };
 
     navigation?.addEventListener("navigate", handler);
     return () => navigation?.removeEventListener("navigate", handler);
-  }, [navigation, scoped, scope]);
+  }, [navigation, scoped, scope, store]);
 
   return createElement(
     NavigationContext.Provider,

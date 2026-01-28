@@ -1,5 +1,11 @@
 ### Project Guidelines
 
+#### Summary
+
+This project provides a React integration for the Navigation API, a new browser API designed with SPA's in mind.
+As this is a relatively new browser API, you should always consult the official documentation
+[MDN Navigation API](https://developer.mozilla.org/en-US/docs/Web/API/Navigation_API) before making changes.
+
 #### Project Structure
 
 This is a monorepo containing the following packages:

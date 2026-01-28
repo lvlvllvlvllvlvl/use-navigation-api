@@ -1,4 +1,11 @@
-import * as React from "react";
+import {
+  createContext,
+  createElement,
+  type ReactNode,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 
 type NavigationContextValue = typeof defaultValue;
 const defaultValue = {
@@ -6,10 +13,10 @@ const defaultValue = {
   url: window?.location?.href || "/",
   info: undefined as unknown,
 };
-const NavigationContext = React.createContext(defaultValue);
+const NavigationContext = createContext(defaultValue);
 
 export const useNavigation = () => {
-  const context = React.useContext(NavigationContext);
+  const context = useContext(NavigationContext);
   if (context) return context;
 };
 
@@ -18,13 +25,13 @@ export const NavigationProvider = ({
   store = "url",
   scoped,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   store?: "url" | "hash" | "memory";
   scoped?: boolean;
 }) => {
   const navigation = store === "url" ? window.navigation : undefined;
-  const [scope, setScope] = React.useState<HTMLDivElement | null>(null);
-  const [state, setState] = React.useState(defaultValue);
+  const [scope, setScope] = useState<HTMLDivElement | null>(null);
+  const [state, setState] = useState(defaultValue);
 
   navigation?.addEventListener("navigate", (event) => {
     if (!event.canIntercept || event.downloadRequest) {
@@ -38,10 +45,10 @@ export const NavigationProvider = ({
     setState({ navigation, url, info: event.info });
   });
 
-  return React.createElement(
+  return createElement(
     NavigationContext.Provider,
     { value: state },
-    scoped ? React.createElement("div", { ref: setScope }, children) : children,
+    scoped ? createElement("div", { ref: setScope }, children) : children,
   );
 };
 
@@ -74,13 +81,13 @@ function parseLocation({ url = "/", info }: NavigationContextValue) {
 export function useLocation(): ReturnType<typeof parseLocation>;
 export function useLocation<R>(parse: (value: NavigationContextValue) => R): R;
 export function useLocation(parse = parseLocation) {
-  const location = React.useContext(NavigationContext);
-  return React.useMemo(() => parse(location), [parse, location]);
+  const location = useContext(NavigationContext);
+  return useMemo(() => parse(location), [parse, location]);
 }
 
 export const useQueryParam = (param: string) => {
   const location = useLocation();
-  return React.useMemo(() => {
+  return useMemo(() => {
     try {
       const url = new URL(location.url, "https://example.com/");
       return url.searchParams.getAll(param);

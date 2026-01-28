@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import { resolve } from "path";
 import dts from "unplugin-dts/vite";
+import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   build: {
@@ -10,7 +11,7 @@ export default defineConfig({
       fileName: (format) => `use-navigation-api.${format}.js`,
     },
     rollupOptions: {
-      external: ["react", "react-dom"], // Add any peer dependencies here
+      external: ["react", "react-dom", "react/jsx-runtime"],
       output: {
         globals: {
           react: "React",
@@ -18,5 +19,5 @@ export default defineConfig({
       },
     },
   },
-  plugins: [dts({ tsconfigPath: "./tsconfig.app.json" })],
+  plugins: [react(), dts({ tsconfigPath: "./tsconfig.app.json" })],
 });

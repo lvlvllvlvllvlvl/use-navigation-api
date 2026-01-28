@@ -10,6 +10,7 @@ This is a monorepo containing the following packages:
 This testing setup allows testing both the build process and the browser integration.
 Test configuration is optimized for cli use. Test output should attempt to balance conciseness with clarity,
 erring towards more verbose output to avoid missing important information when running on a ci server.
+The test wrapper in `e2e/fixtures.ts` should be updated as appropriate to provide useful debug information.
 
 #### Development Workflow
 

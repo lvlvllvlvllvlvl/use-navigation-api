@@ -18,21 +18,24 @@ interface Navigation extends EventTarget {
   forward(options?: NavigationOptions): NavigationResult;
 
   onnavigate:
-    | ((this: Navigation, ev: NavigationEventMap["navigate"]) => any)
+    | ((this: Navigation, ev: NavigationEventMap["navigate"]) => unknown)
     | null;
   onnavigatesuccess:
-    | ((this: Navigation, ev: NavigationEventMap["navigatesuccess"]) => any)
+    | ((this: Navigation, ev: NavigationEventMap["navigatesuccess"]) => unknown)
     | null;
   onnavigateerror:
-    | ((this: Navigation, ev: NavigationEventMap["navigateerror"]) => any)
+    | ((this: Navigation, ev: NavigationEventMap["navigateerror"]) => unknown)
     | null;
   oncurrententrychange:
-    | ((this: Navigation, ev: NavigationEventMap["currententrychange"]) => any)
+    | ((
+        this: Navigation,
+        ev: NavigationEventMap["currententrychange"],
+      ) => unknown)
     | null;
 
   addEventListener<K extends keyof NavigationEventMap>(
     type: K,
-    listener: (this: Navigation, ev: NavigationEventMap[K]) => any,
+    listener: (this: Navigation, ev: NavigationEventMap[K]) => unknown,
     options?: boolean | AddEventListenerOptions,
   ): void;
   addEventListener(
@@ -42,7 +45,7 @@ interface Navigation extends EventTarget {
   ): void;
   removeEventListener<K extends keyof NavigationEventMap>(
     type: K,
-    listener: (this: Navigation, ev: NavigationEventMap[K]) => any,
+    listener: (this: Navigation, ev: NavigationEventMap[K]) => unknown,
     options?: boolean | EventListenerOptions,
   ): void;
   removeEventListener(
@@ -61,6 +64,7 @@ interface NavigationEventMap {
 
 declare const navigation: Navigation | undefined;
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 declare interface Window extends WindowNavigation {}
 
 declare interface WindowNavigation {
@@ -77,7 +81,7 @@ interface NavigateEvent extends Event {
   readonly signal: AbortSignal;
   readonly formData: FormData | null;
   readonly downloadRequest: string | null;
-  readonly info: any;
+  readonly info: unknown;
   readonly hasUAVisualTransition: boolean;
   readonly sourceElement: Element | null;
 
@@ -97,7 +101,7 @@ interface NavigateEvent extends Event {
   scroll(): void;
 }
 
-declare var NavigateEvent: {
+declare const NavigateEvent: {
   prototype: NavigateEvent;
   new (type: string, eventInit: NavigateEventInit): Event;
 };
@@ -112,7 +116,7 @@ interface NavigateEventInit extends EventInit {
   signal: AbortSignal;
   formData?: FormData | null;
   downloadRequest?: string | null;
-  info?: any;
+  info?: unknown;
   hasUAVisualTransition?: boolean;
   sourceElement?: Element | null;
 }
@@ -123,7 +127,7 @@ interface NavigationCurrentEntryChangeEvent extends Event {
   readonly from: NavigationHistoryEntry;
 }
 
-declare var NavigationCurrentEntryChangeEvent: {
+declare const NavigationCurrentEntryChangeEvent: {
   prototype: NavigationCurrentEntryChangeEvent;
   new (type: string, eventInit: NavigationCurrentEntryChangeEventInit): Event;
 };
@@ -142,13 +146,13 @@ interface NavigationHistoryEntry extends EventTarget {
   readonly index: number;
   readonly sameDocument: boolean;
 
-  getState(): any;
+  getState(): unknown;
 
-  ondispose: ((this: NavigationHistoryEntry, ev: Event) => any) | null;
+  ondispose: ((this: NavigationHistoryEntry, ev: Event) => unknown) | null;
 
   addEventListener(
     type: "dispose",
-    callback: (this: NavigationHistoryEntry, ev: Event) => any,
+    callback: (this: NavigationHistoryEntry, ev: Event) => unknown,
     options?: boolean | AddEventListenerOptions,
   ): void;
   addEventListener(
@@ -158,7 +162,7 @@ interface NavigationHistoryEntry extends EventTarget {
   ): void;
   removeEventListener(
     type: "dispose",
-    callback: (this: NavigationHistoryEntry, ev: Event) => any,
+    callback: (this: NavigationHistoryEntry, ev: Event) => unknown,
     options?: boolean | EventListenerOptions,
   ): void;
   removeEventListener(
@@ -176,29 +180,29 @@ interface NavigationDestination {
   readonly index: number;
   readonly sameDocument: boolean;
 
-  getState(): any;
+  getState(): unknown;
 }
 
 /** @see https://html.spec.whatwg.org/multipage/nav-history-apis.html#navigationupdatecurrententryoptions */
 interface NavigationUpdateCurrentEntryOptions {
-  state: any;
+  state: unknown;
 }
 
 /** @see https://html.spec.whatwg.org/multipage/nav-history-apis.html#navigationoptions */
 interface NavigationOptions {
-  info?: any;
+  info?: unknown;
 }
 
 /** @see https://html.spec.whatwg.org/multipage/nav-history-apis.html#navigationnavigateoptions */
 interface NavigationNavigateOptions extends NavigationOptions {
-  state?: any;
+  state?: unknown;
   // Defaults to "auto"
   history?: NavigationHistoryBehavior;
 }
 
 /** @see https://html.spec.whatwg.org/multipage/nav-history-apis.html#navigationreloadoptions */
 interface NavigationReloadOptions extends NavigationOptions {
-  state?: any;
+  state?: unknown;
 }
 
 /** @see https://html.spec.whatwg.org/multipage/nav-history-apis.html#navigationtransition */
@@ -217,6 +221,7 @@ interface NavigationResult {
 /** @see https://html.spec.whatwg.org/multipage/nav-history-apis.html#navigationinterceptoptions */
 interface NavigationInterceptOptions {
   handler?: NavigationInterceptHandler;
+  precommitHandler?: NavigationPrecommitHandler;
   focusReset?: NavigationFocusReset;
   scroll?: NavigationScrollBehavior;
   /**
@@ -235,6 +240,17 @@ type NavigationHistoryBehavior = "auto" | "push" | "replace";
 
 /** @see https://html.spec.whatwg.org/multipage/nav-history-apis.html#navigationintercepthandler */
 type NavigationInterceptHandler = () => Promise<void>;
+
+/** @see https://html.spec.whatwg.org/multipage/nav-history-apis.html#navigationprecommithandler */
+type NavigationPrecommitHandler = (
+  controller: NavigationPrecommitController,
+) => Promise<void>;
+
+/** @see https://html.spec.whatwg.org/multipage/nav-history-apis.html#navigationprecommitcontroller */
+interface NavigationPrecommitController {
+  redirect: (url: string, options?: NavigationNavigateOptions = {}) => void;
+  addHandler: (handler: NavigationInterceptHandler) => void;
+}
 
 /** @see https://html.spec.whatwg.org/multipage/nav-history-apis.html#navigationfocusreset */
 type NavigationFocusReset = "after-transition" | "manual";

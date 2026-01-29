@@ -4,11 +4,11 @@ Simple [Navigation API](https://developer.mozilla.org/en-US/docs/Web/API/Navigat
 
 ## Usage
 
-Wrap your application in a `<NavigationProvider>`, optionally specifying a `store` if you wish to store navigation locations
+Wrap your application in a `<NavigationProvider logger={console.log}>`, optionally specifying a `store` if you wish to store navigation locations
 anywhere other than the browser's location or to modify the location before completing navigation,
-for instance you can convert an app to use hash-based routing by specifying `<NavigationProvider store="hash">`,
+for instance you can convert an app to use hash-based routing by specifying `<NavigationProvider logger={console.log} store="hash">`,
 or bypass the browser location entirely using `store="memory"`. Setting `scoped` to `true` will ignore navigation
-events originating from components or elements outside the `<NavigationProvider>` component.
+events originating from components or elements outside the `<NavigationProvider logger={console.log}>` component.
 If you render multiple providers, pass a stable `id` to each or let the provider generate one automatically.
 
 The `useNavigation` returns a [Navigation](https://developer.mozilla.org/en-US/docs/Web/API/Navigation) object.

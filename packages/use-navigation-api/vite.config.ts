@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import { resolve } from "path";
 import dts from "unplugin-dts/vite";
 import react from "@vitejs/plugin-react";
+import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
   build: {
@@ -19,5 +20,9 @@ export default defineConfig({
       },
     },
   },
-  plugins: [react(), dts({ tsconfigPath: "./tsconfig.app.json" })],
+  plugins: [
+    react(),
+    dts({ tsconfigPath: "./tsconfig.app.json" }),
+    tsconfigPaths(),
+  ],
 });

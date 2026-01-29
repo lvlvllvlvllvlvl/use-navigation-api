@@ -11,9 +11,9 @@ As this is a relatively new browser API, you should always consult the official 
 This is a monorepo containing the following packages:
 
 - `packages/use-navigation-api`: The core library providing react hooks for the browser's Navigation API.
-  - `navigationProvider`: React context provider that wires Navigation API events, scope handling, and store mode.
-  - `useNavigate`: Hook that returns a context-aware Navigation instance.
-  - `location/*`: Helper hooks for accessing the current location.
+    - `navigationProvider`: React context provider that wires Navigation API events, scope handling, and store mode.
+    - `useNavigate`: Hook that returns a context-aware Navigation instance.
+    - `location/*`: Helper hooks for accessing the current location.
 - `packages/tests`: A React-based test app and Playwright E2E test suite to verify the library's functionality.
 
 This testing setup allows testing both the build process and the browser integration.
@@ -43,11 +43,14 @@ parameter. Always rebuild the project before running tests.
 
 When making changes or adding new features, follow a Test-Driven Development approach:
 
-1. **Create a test:** Before modifying any production code, create a reproduction test case in the `packages/tests`
-   package.
+1. **Create a test:** Before fixing issues or adding new features, create a test case for the intended behavior in the
+   `packages/tests` package. These tests will be useful later when making unrelated changes or refactoring.
 2. **Confirm failure:** Run the tests using `npm run test` from the root and verify that the newly created test fails as
    expected.
 3. **Implement changes:** Modify the code in `packages/use-navigation-api` to add the desired functionality.
 4. **Verify success:** Build the project then run the tests again to ensure the test now passes and no regressions were
    introduced. If there is any uncertainty about the results of the test, ask the user to inspect the behavior in their
    browser.
+
+After completing any changes, including non-functional changes, run the linter and all tests again to ensure no
+regressions have been introduced. 

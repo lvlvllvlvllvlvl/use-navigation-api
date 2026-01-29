@@ -9,6 +9,7 @@ anywhere other than the browser's location or to modify the location before comp
 for instance you can convert an app to use hash-based routing by specifying `<NavigationProvider store="hash">`,
 or bypass the browser location entirely using `store="memory"`. Setting `scoped` to `true` will ignore navigation
 events originating from components or elements outside the `<NavigationProvider>` component.
+If you render multiple providers, pass a stable `id` to each or let the provider generate one automatically.
 
 The `useNavigation` returns a [Navigation](https://developer.mozilla.org/en-US/docs/Web/API/Navigation) object.
 `window.navigation` or `<a>` tags can also be used directly, if browser support for the Navigation API is available
@@ -18,4 +19,3 @@ TODO: test this library on older browsers with the https://github.com/virtualsta
 
 `useLocation` returns the current URL, `useNavigationState` returns the state associated with the current history entry,
 or helper functions such as `useQueryParam` can be used for more fine-grained access.
-

@@ -13,6 +13,7 @@ export default defineConfig({
         scoped: fileURLToPath(new URL("scoped.html", import.meta.url)),
         memory: fileURLToPath(new URL("memory.html", import.meta.url)),
         nested: fileURLToPath(new URL("nested.html", import.meta.url)),
+        peers: fileURLToPath(new URL("peers.html", import.meta.url)),
       },
     },
   },

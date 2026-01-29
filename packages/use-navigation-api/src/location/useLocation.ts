@@ -2,7 +2,7 @@ import { useContext, useMemo } from "react";
 import {
   NavigationContext,
   type NavigationContextState,
-} from "src/navigationProvider";
+} from "src/navigationProvider.ts";
 
 function parseLocation(
   location: string,

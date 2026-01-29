@@ -11,6 +11,9 @@ As this is a relatively new browser API, you should always consult the official 
 This is a monorepo containing the following packages:
 
 - `packages/use-navigation-api`: The core library providing react hooks for the browser's Navigation API.
+  - `navigationProvider`: React context provider that wires Navigation API events, scope handling, and store mode.
+  - `useNavigate`: Hook that returns a context-aware Navigation instance.
+  - `location/*`: Helper hooks for accessing the current location.
 - `packages/tests`: A React-based test app and Playwright E2E test suite to verify the library's functionality.
 
 This testing setup allows testing both the build process and the browser integration.

@@ -1,4 +1,4 @@
-import { useLocation } from "src/useLocation";
+import { useLocation } from "src/location/useLocation.ts";
 import { useMemo } from "react";
 
 export function useQueryParam(param: string, all?: false): string | null;

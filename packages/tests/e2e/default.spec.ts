@@ -43,3 +43,11 @@ test("should handle relative links correctly", async ({ page }) => {
   await page.locator("#link-edit-relative").click();
   await expect(page.locator("#navigation-url")).toContainText("/edit");
 });
+
+test("should navigate via the useNavigate navigation object", async ({
+  page,
+}) => {
+  await page.goto("/default");
+  await page.locator("#navigate-products").click();
+  await expect(page.locator("#navigation-url")).toContainText("/products");
+});

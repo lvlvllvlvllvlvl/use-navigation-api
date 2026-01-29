@@ -66,3 +66,22 @@ test("memory store should handle query parameters using useQueryParam", async ({
   const paramElement = page.locator("#query-param-view");
   await expect(paramElement).toHaveText("details");
 });
+
+test("memory store should navigate via useNavigate and resolve relative paths", async ({
+  page,
+}) => {
+  await page.goto("/memory.html");
+  const initialUrl = page.url();
+
+  await page.locator("#navigate-products").click();
+  const urlElement = page.locator("#navigation-url");
+  await expect(urlElement).toContainText("/products");
+  expect(page.url()).toBe(initialUrl);
+
+  await page.locator("#link-settings-profile").click();
+  await expect(urlElement).toContainText("/settings/profile");
+
+  await page.locator("#navigate-edit-relative").click();
+  await expect(urlElement).toContainText("/settings/edit");
+  expect(page.url()).toBe(initialUrl);
+});

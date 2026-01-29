@@ -1,25 +1,36 @@
 import {
   createContext,
   createElement,
+  type Dispatch,
   type FC,
   type ReactNode,
+  type SetStateAction,
   useContext,
   useEffect,
   useMemo,
   useState,
 } from "react";
 
-type NavigationContextValue = typeof defaultValue;
-const defaultValue = {
-  navigation: window.navigation,
+type NavigationContextState<Info = unknown> = {
+  navigation: Navigation;
+  url: string;
+  info: Info;
+  store: "url" | "hash" | "memory";
+};
+type NavigationContextValue = NavigationContextState & {
+  setState?: Dispatch<SetStateAction<NavigationContextState>>;
+};
+const defaultValue: NavigationContextValue = {
+  navigation: window.navigation!,
   url: window?.location?.href || "/",
   info: undefined as unknown,
+  store: "url" as "url" | "hash" | "memory",
 };
 const NavigationContext = createContext(defaultValue);
 
-export const useNavigation = () => {
+export const useNavigation = <Info = unknown>() => {
   const context = useContext(NavigationContext);
-  if (context) return context;
+  if (context) return context as NavigationContextState<Info>;
 };
 
 function defaultShouldHandle(event: NavigateEvent) {
@@ -27,6 +38,23 @@ function defaultShouldHandle(event: NavigateEvent) {
 }
 
 type ShouldHandle = typeof defaultShouldHandle;
+
+type Resolution<T> = {
+  resolve: (value: T) => void;
+  reject: (reason?: unknown) => void;
+};
+type Future<T> = Promise<T> & Resolution<T>;
+function future<T>(suppressUncaught?: boolean) {
+  const resolution = {} as Resolution<T>;
+  const result = new Promise<T>((resolve, reject) => {
+    resolution.resolve = resolve;
+    resolution.reject = reject;
+  }) as Future<T>;
+  result.resolve = resolution.resolve;
+  result.reject = resolution.reject;
+  if (suppressUncaught) result.catch(() => {});
+  return result;
+}
 
 export const NavigationProvider: FC<{
   children: ReactNode;
@@ -39,10 +67,9 @@ export const NavigationProvider: FC<{
   scoped,
   shouldHandle = defaultShouldHandle,
 }) => {
-  const navigation =
-    store === "url" || store === "memory" ? window.navigation : undefined;
+  const navigation = defaultValue.navigation;
   const [scope, setScope] = useState<HTMLDivElement | null>(null);
-  const [state, setState] = useState(defaultValue);
+  const [state, setState] = useState(() => ({ ...defaultValue, store }));
   const skip = useMemo(
     () => (event: NavigateEvent) => {
       const target = event.sourceElement;
@@ -72,12 +99,12 @@ export const NavigationProvider: FC<{
               url = new URL(href, prev.url).href;
             }
           }
-          return { ...prev, url, info: event.info };
+          return { ...prev, url, info: event.info, store };
         });
       } else {
         event.intercept({
           async handler() {
-            setState({ navigation, url, info: event.info });
+            setState({ navigation, url, info: event.info, store });
           },
         });
       }
@@ -87,18 +114,67 @@ export const NavigationProvider: FC<{
     return () => navigation?.removeEventListener("navigate", handler);
   }, [skip, navigation, scoped, store]);
 
+  const value = useMemo(() => ({ ...state, setState }), [state]);
+
   return createElement(
     NavigationContext.Provider,
-    { value: state },
+    { value },
     scoped ? createElement("div", { ref: setScope }, children) : children,
   );
 };
 
-function parseLocation({ url = "/", info }: NavigationContextValue) {
+export function useNavigate() {
+  const { navigation, setState } = useContext(NavigationContext);
+  return useMemo(() => {
+    if (!setState) return navigation;
+    const navigate: Navigation["navigate"] = (destination, options) => {
+      const result = {
+        committed: future(true),
+        finished: future(true),
+      };
+      const handle = ({ committed, finished }: NavigationResult) => {
+        committed.then(result.committed.resolve, result.committed.reject);
+        finished.then(result.finished.resolve, result.finished.reject);
+      };
+
+      setState((state) => {
+        Promise.resolve().then(() => {
+          try {
+            handle(
+              navigation.navigate(
+                new URL(destination, state.url).href,
+                options,
+              ),
+            );
+          } catch {
+            handle(navigation.navigate(destination, options));
+          }
+        });
+        return state;
+      });
+      return result as NavigationResult;
+    };
+    return new Proxy(navigation, {
+      get(target, prop, receiver) {
+        if (prop === "navigate") return navigate;
+        const value = Reflect.get(target, prop, receiver);
+        return typeof value === "function" ? value.bind(target) : value;
+      },
+    });
+  }, [navigation, setState]);
+}
+
+function parseLocation(
+  location: string,
+  {
+    url = window?.location?.href || "https://example.com/",
+    info,
+  }: NavigationContextState,
+) {
   try {
-    const parsed = new URL(url, "https://example.com/");
+    const parsed = new URL(location, url);
     return {
-      url,
+      url: parsed.href,
       info,
       pathname: parsed.pathname,
       search: parsed.search,
@@ -108,6 +184,7 @@ function parseLocation({ url = "/", info }: NavigationContextValue) {
   } catch {
     /* fall back to string parsing */
   }
+  url = location || url;
   const pathname = url.split("?")[0];
   const search = url.substring(pathname.length).split("#")[0];
   const hash = url.substring(pathname.length + search.length);
@@ -121,10 +198,12 @@ function parseLocation({ url = "/", info }: NavigationContextValue) {
 }
 
 export function useLocation(): ReturnType<typeof parseLocation>;
-export function useLocation<R>(parse: (value: NavigationContextValue) => R): R;
+export function useLocation<R>(
+  parse: (location: string, value: NavigationContextState) => R,
+): R;
 export function useLocation(parse = parseLocation) {
   const location = useContext(NavigationContext);
-  return useMemo(() => parse(location), [parse, location]);
+  return useMemo(() => parse("", location), [parse, location]);
 }
 
 export function useQueryParam(param: string, all?: false): string | null;

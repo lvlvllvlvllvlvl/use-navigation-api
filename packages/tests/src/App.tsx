@@ -1,7 +1,8 @@
-import { useLocation, useQueryParam } from "use-navigation-api";
+import { useLocation, useNavigate, useQueryParam } from "use-navigation-api";
 
 function App() {
   const { url } = useLocation();
+  const navigation = useNavigate();
   const testParam = useQueryParam("test");
   const multiParam = useQueryParam("multi", true);
 
@@ -23,6 +24,22 @@ function App() {
         Missing Param:{" "}
         <code id="query-param-missing">{String(useQueryParam("missing"))}</code>
       </p>
+      <div>
+        <button
+          id="navigate-products"
+          type="button"
+          onClick={() => navigation?.navigate("/products")}
+        >
+          Navigate to Products
+        </button>
+        <button
+          id="navigate-edit-relative"
+          type="button"
+          onClick={() => navigation?.navigate("edit")}
+        >
+          Navigate to Edit (relative)
+        </button>
+      </div>
       <nav>
         <a href="/products" id="link-products">
           Products

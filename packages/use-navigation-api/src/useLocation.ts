@@ -8,14 +8,12 @@ function parseLocation(
   location: string,
   {
     url = window?.location?.href || "https://example.com/",
-    info,
   }: NavigationContextState,
 ) {
   try {
     const parsed = new URL(location, url);
     return {
       url: parsed.href,
-      info,
       pathname: parsed.pathname,
       search: parsed.search,
       hash: parsed.hash,
@@ -30,10 +28,10 @@ function parseLocation(
   const hash = url.substring(pathname.length + search.length);
   try {
     const searchParams = new URLSearchParams(search);
-    return { url, info, pathname, search, hash, searchParams };
+    return { url, pathname, search, hash, searchParams };
   } catch {
     const searchParams = new URLSearchParams();
-    return { url, info, pathname, search, hash, searchParams };
+    return { url, pathname, search, hash, searchParams };
   }
 }
 

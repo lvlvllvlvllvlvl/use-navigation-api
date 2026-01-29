@@ -10,10 +10,9 @@ import {
   useState,
 } from "react";
 
-export type NavigationContextState<Info = unknown> = {
+export type NavigationContextState = {
   navigation: Navigation;
   url: string;
-  info: Info;
   store: "url" | "hash" | "memory";
 };
 type NavigationContextValue = NavigationContextState & {
@@ -22,7 +21,6 @@ type NavigationContextValue = NavigationContextState & {
 const defaultValue: NavigationContextValue = {
   navigation: window.navigation!,
   url: window?.location?.href || "/",
-  info: undefined as unknown,
   store: "url" as "url" | "hash" | "memory",
 };
 export const NavigationContext = createContext(defaultValue);
@@ -75,12 +73,12 @@ export const NavigationProvider: FC<{
               url = new URL(href, prev.url).href;
             }
           }
-          return { ...prev, url, info: event.info, store };
+          return { ...prev, url, store };
         });
       } else {
         event.intercept({
           async handler() {
-            setState({ navigation, url, info: event.info, store });
+            setState({ navigation, url, store });
           },
         });
       }

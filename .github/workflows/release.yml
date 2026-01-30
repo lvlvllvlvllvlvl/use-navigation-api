@@ -29,6 +29,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 23
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: npm ci
@@ -37,26 +38,7 @@ jobs:
         run: npm run build --workspace use-navigation-api
 
       - name: Bump package version
-        run: npm version "${{ inputs.bump }}" --workspace use-navigation-api --no-git-tag-version
-
-      - name: Debug publish context
-        run: |
-          echo "GITHUB_REF=$GITHUB_REF"
-          echo "GITHUB_REF_NAME=$GITHUB_REF_NAME"
-          echo "GITHUB_WORKFLOW_REF=$GITHUB_WORKFLOW_REF"
-          echo "GITHUB_REPOSITORY=$GITHUB_REPOSITORY"
-          echo "workspace .npmrc:"
-          if [ -f .npmrc ]; then
-            cat .npmrc
-          else
-            echo "(none)"
-          fi
-          echo "runner .npmrc:"
-          if [ -f "$HOME/.npmrc" ]; then
-            cat "$HOME/.npmrc"
-          else
-            echo "(none)"
-          fi
+        run: npm version "${{ inputs.bump }}" --workspace use-navigation-api
 
       - name: Publish to npm
         run: |

@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lvlvllvlvllvlvl/use-navigation-api"
+    "url": "git+https://github.com/lvlvllvlvllvlvl/use-navigation-api.git"
   },
   "type": "module",
   "scripts": {

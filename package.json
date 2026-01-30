@@ -1,10 +1,16 @@
 {
   "name": "use-navigation-api-monorepo",
+  "description": "Simple Navigation API integration for React",
   "private": true,
+  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lvlvllvlvllvlvl/use-navigation-api"
+    "url": "git+https://github.com/lvlvllvlvllvlvl/use-navigation-api.git"
   },
+  "bugs": {
+    "url": "https://github.com/lvlvllvlvllvlvl/use-navigation-api/issues"
+  },
+  "homepage": "https://github.com/lvlvllvlvllvlvl/use-navigation-api#readme",
   "workspaces": [
     "packages/use-navigation-api",
     "packages/tests"
@@ -24,5 +30,6 @@
   "dependencies": {
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
-  }
+  },
+  "version": ""
 }

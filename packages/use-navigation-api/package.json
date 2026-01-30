@@ -1,10 +1,16 @@
 {
   "name": "use-navigation-api",
   "private": false,
+  "description": "Simple Navigation API integration for React",
+  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lvlvllvlvllvlvl/use-navigation-api"
+    "url": "git+https://github.com/lvlvllvlvllvlvl/use-navigation-api.git"
   },
+  "bugs": {
+    "url": "https://github.com/lvlvllvlvllvlvl/use-navigation-api/issues"
+  },
+  "homepage": "https://github.com/lvlvllvlvllvlvl/use-navigation-api#readme",
   "main": "./dist/use-navigation-api.umd.js",
   "module": "./dist/use-navigation-api.es.js",
   "types": "./dist/index.d.ts",

@@ -35,6 +35,32 @@ test("should return null for missing query parameter", async ({ page }) => {
   await expect(paramElement).toHaveText("null");
 });
 
+test("should update the location when useLocationWithParam sets a value", async ({
+  page,
+}) => {
+  await page.goto("/default?test=value&other=1");
+  const locationText = await page
+    .locator("#location-with-test-param")
+    .textContent();
+  expect(locationText).not.toBeNull();
+  const parsed = new URL(locationText!);
+  expect(parsed.searchParams.get("test")).toBe("override");
+  expect(parsed.searchParams.get("other")).toBe("1");
+});
+
+test("should update the location when useLocationWithParam removes a value", async ({
+  page,
+}) => {
+  await page.goto("/default?test=value&other=1");
+  const locationText = await page
+    .locator("#location-without-test-param")
+    .textContent();
+  expect(locationText).not.toBeNull();
+  const parsed = new URL(locationText!);
+  expect(parsed.searchParams.get("test")).toBeNull();
+  expect(parsed.searchParams.get("other")).toBe("1");
+});
+
 test("should handle relative links correctly", async ({ page }) => {
   await page.goto("/default");
   await page.locator("#link-products").click();

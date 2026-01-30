@@ -1,4 +1,5 @@
 export * from "./navigationProvider";
-export * from "./location/useLocation.ts";
 export * from "./useNavigate";
-export * from "./location/useQueryParam.ts";
+export * from "./location/useLocation";
+export * from "./location/useQueryParam";
+export * from "./location/useLocationWithParam";

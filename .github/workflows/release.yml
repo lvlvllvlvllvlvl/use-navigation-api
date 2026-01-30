@@ -39,6 +39,15 @@ jobs:
       - name: Bump package version
         run: npm version "${{ inputs.bump }}" --workspace use-navigation-api --no-git-tag-version
 
+      - name: log npm config
+        run: |
+          node -v
+          npm -v
+          npm config get registry
+
+      - name: Publish to npm
+        run: npm publish --workspace use-navigation-api --provenance
+
       - name: Commit and tag release
         run: |
           VERSION="$(node -p "require('./packages/use-navigation-api/package.json').version")"
@@ -49,6 +58,3 @@ jobs:
           git tag "v${VERSION}"
           git push origin HEAD
           git push origin "v${VERSION}"
-
-      - name: Publish to npm
-        run: npm publish --workspace use-navigation-api --provenance

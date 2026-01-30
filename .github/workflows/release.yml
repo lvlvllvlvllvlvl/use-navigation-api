@@ -39,10 +39,28 @@ jobs:
       - name: Bump package version
         run: npm version "${{ inputs.bump }}" --workspace use-navigation-api --no-git-tag-version
 
+      - name: Debug publish context
+        run: |
+          echo "GITHUB_REF=$GITHUB_REF"
+          echo "GITHUB_REF_NAME=$GITHUB_REF_NAME"
+          echo "GITHUB_WORKFLOW_REF=$GITHUB_WORKFLOW_REF"
+          echo "GITHUB_REPOSITORY=$GITHUB_REPOSITORY"
+          echo "workspace .npmrc:"
+          if [ -f .npmrc ]; then
+            cat .npmrc
+          else
+            echo "(none)"
+          fi
+          echo "runner .npmrc:"
+          if [ -f "$HOME/.npmrc" ]; then
+            cat "$HOME/.npmrc"
+          else
+            echo "(none)"
+          fi
+
       - name: Publish to npm
         run: |
-          npm publish --workspace use-navigation-api --provenance --access public || true
-          cat ~/.npm/_logs/*
+          npm publish --workspace use-navigation-api --provenance --access public
 
       - name: Commit and tag release
         run: |

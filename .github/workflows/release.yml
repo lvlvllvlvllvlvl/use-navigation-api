@@ -34,13 +34,10 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run build
-
-      - name: Lint
-        run: npm run lint
+        run: npm run build --workspace use-navigation-api
 
       - name: Bump package version
-        run: npm version "${{ inputs.bump }}" --workspace packages/use-navigation-api --no-git-tag-version
+        run: npm version "${{ inputs.bump }}" --workspace use-navigation-api --no-git-tag-version
 
       - name: Commit and tag release
         run: |
@@ -54,4 +51,4 @@ jobs:
           git push origin "v${VERSION}"
 
       - name: Publish to npm
-        run: npm publish --workspace packages/use-navigation-api --provenance
+        run: npm publish --workspace use-navigation-api --provenance

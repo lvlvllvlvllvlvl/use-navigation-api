@@ -6,7 +6,7 @@ export function InnerApp() {
     <div id="inner-scope">
       <h3>Inner (Memory)</h3>
       <p>
-        Inner URL: <code id="inner-url">{url}</code>
+        Inner URL: <code id="inner-url">{url?.href}</code>
       </p>
       <nav>
         <a href="inner-path" id="link-inner">

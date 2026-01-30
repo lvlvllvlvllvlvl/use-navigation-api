@@ -9,7 +9,7 @@ function App() {
   return (
     <>
       <p>
-        URL: <code id="navigation-url">{url}</code>
+        URL: <code id="navigation-url">{url?.href}</code>
       </p>
       <p>
         Test Param: <code id="query-param-test">{testParam}</code>

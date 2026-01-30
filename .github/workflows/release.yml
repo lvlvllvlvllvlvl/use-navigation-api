@@ -53,4 +53,5 @@ jobs:
 
       - name: Publish to npm
         run: |
-          npm publish --workspace use-navigation-api --provenance --access public
+          npm publish --provenance
+        working-directory: packages/use-navigation-api

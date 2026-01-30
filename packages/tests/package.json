@@ -2,6 +2,10 @@
   "name": "tests",
   "private": true,
   "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lvlvllvlvllvlvl/use-navigation-api"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",

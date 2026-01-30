@@ -1,6 +1,10 @@
 {
   "name": "use-navigation-api-monorepo",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lvlvllvlvllvlvl/use-navigation-api"
+  },
   "workspaces": [
     "packages/use-navigation-api",
     "packages/tests"

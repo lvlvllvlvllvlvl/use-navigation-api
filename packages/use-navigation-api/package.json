@@ -1,6 +1,10 @@
 {
   "name": "use-navigation-api",
   "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lvlvllvlvllvlvl/use-navigation-api"
+  },
   "main": "./dist/use-navigation-api.umd.js",
   "module": "./dist/use-navigation-api.es.js",
   "types": "./dist/index.d.ts",

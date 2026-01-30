@@ -1,4 +1,4 @@
-name: Release
+name: release.yml
 
 on:
   workflow_dispatch:
@@ -39,12 +39,10 @@ jobs:
       - name: Bump package version
         run: npm version "${{ inputs.bump }}" --workspace use-navigation-api --no-git-tag-version
 
-      - name: log OIDC presence
-        run: |
-          test -n "$ACTIONS_ID_TOKEN_REQUEST_URL" && echo "OIDC available" || echo "OIDC missing"
-
       - name: Publish to npm
-        run: npm publish --workspace use-navigation-api --provenance --access public
+        run: |
+          npm publish --workspace use-navigation-api --provenance --access public
+          cat ~/.npm/_logs/*
 
       - name: Commit and tag release
         run: |

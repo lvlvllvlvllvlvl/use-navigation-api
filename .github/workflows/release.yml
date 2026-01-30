@@ -41,7 +41,7 @@ jobs:
 
       - name: Publish to npm
         run: |
-          npm publish --workspace use-navigation-api --provenance --access public
+          npm publish --workspace use-navigation-api --provenance --access public || true
           cat ~/.npm/_logs/*
 
       - name: Commit and tag release

@@ -29,7 +29,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 23
-          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: npm ci
@@ -39,6 +38,11 @@ jobs:
 
       - name: Bump package version
         run: npm version "${{ inputs.bump }}" --workspace use-navigation-api
+
+      - name: Publish to npm
+        run: |
+          npm publish --provenance
+        working-directory: packages/use-navigation-api
 
       - name: Commit and tag release
         run: |
@@ -50,8 +54,3 @@ jobs:
           git tag "v${VERSION}"
           git push origin HEAD
           git push origin "v${VERSION}"
-
-      - name: Publish to npm
-        run: |
-          npm publish --provenance
-        working-directory: packages/use-navigation-api

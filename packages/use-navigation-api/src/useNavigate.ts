@@ -4,9 +4,9 @@ import { future } from "src/util/future";
 import URI from "uri-js";
 
 export function useNavigate() {
-  const { navigation, setState } = useContext(NavigationContext);
+  const { setState } = useContext(NavigationContext);
   return useMemo(() => {
-    if (!setState) return navigation;
+    if (!setState || !navigation) return navigation;
     const navigate: Navigation["navigate"] = (destination, options) => {
       const result = {
         committed: future(true),
@@ -38,5 +38,5 @@ export function useNavigate() {
         return typeof value === "function" ? value.bind(target) : value;
       },
     });
-  }, [navigation, setState]);
+  }, [setState]);
 }

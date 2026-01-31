@@ -12,7 +12,6 @@ import {
 import URI from "uri-js";
 
 export type NavigationContextState = {
-  navigation: Navigation;
   url: string;
   store: "url" | "hash" | "memory";
 };
@@ -20,8 +19,7 @@ type NavigationContextValue = NavigationContextState & {
   setState?: Dispatch<SetStateAction<NavigationContextState>>;
 };
 const defaultValue: NavigationContextValue = {
-  navigation: window.navigation!,
-  url: window?.location?.href || "/",
+  url: "/",
   store: "url" as "url" | "hash" | "memory",
 };
 export const NavigationContext = createContext(defaultValue);
@@ -42,7 +40,6 @@ export const NavigationProvider: FC<{
   scoped,
   shouldHandle = defaultShouldHandle,
 }) => {
-  const navigation = defaultValue.navigation;
   const [scope, setScope] = useState<HTMLDivElement | null>(null);
   const [state, setState] = useState(() => ({ ...defaultValue, store }));
   const skip = useMemo(
@@ -79,7 +76,7 @@ export const NavigationProvider: FC<{
       } else {
         event.intercept({
           async handler() {
-            setState({ navigation, url, store });
+            setState({ url, store });
           },
         });
       }

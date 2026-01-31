@@ -1,5 +1,10 @@
 import { test as base } from "@playwright/test";
 
+export function toRelativeUrl(url: string): string {
+  const parsed = new URL(url);
+  return `${parsed.pathname}${parsed.search}${parsed.hash}`;
+}
+
 export const test = base.extend({
   page: async ({ page }, use, testInfo) => {
     const logs: string[] = [];

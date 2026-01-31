@@ -1,4 +1,4 @@
-import { test, expect } from "./fixtures";
+import { test, expect, toRelativeUrl } from "./fixtures";
 
 test("should intercept navigation within the scoped element", async ({
   page,
@@ -12,7 +12,7 @@ test("should intercept navigation within the scoped element", async ({
 
   // useLocation should reflect the change
   const urlElement = page.locator("#navigation-url");
-  await expect(urlElement).toHaveText(page.url());
+  await expect(urlElement).toHaveText(toRelativeUrl(page.url()));
 });
 
 test("should NOT intercept navigation from outside the scoped element", async ({

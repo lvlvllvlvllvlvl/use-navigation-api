@@ -1,4 +1,4 @@
-import { test, expect } from "./fixtures";
+import { test, expect, toRelativeUrl } from "./fixtures";
 import { parseSearchParams } from "use-navigation-api";
 
 test("should load the app without errors", async ({ page }) => {
@@ -10,7 +10,7 @@ test("should display the current navigation url in the app ui", async ({
 }) => {
   await page.goto("/default");
   const urlElement = page.locator("#navigation-url");
-  const currentUrl = page.url();
+  const currentUrl = toRelativeUrl(page.url());
   await expect(urlElement).toHaveText(currentUrl);
 });
 

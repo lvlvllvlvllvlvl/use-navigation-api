@@ -41,7 +41,10 @@ export const NavigationProvider: FC<{
   shouldHandle = defaultShouldHandle,
 }) => {
   const [scope, setScope] = useState<HTMLDivElement | null>(null);
-  const [state, setState] = useState(() => ({ ...defaultValue, store }));
+  const [state, setState] = useState(() => ({
+    store,
+    url: window.location.href,
+  }));
   const skip = useMemo(
     () => (event: NavigateEvent) => {
       const target = event.sourceElement;
@@ -84,7 +87,7 @@ export const NavigationProvider: FC<{
 
     navigation?.addEventListener("navigate", handler);
     return () => navigation?.removeEventListener("navigate", handler);
-  }, [skip, navigation, scoped, store]);
+  }, [skip, scoped, store]);
 
   const value = useMemo(() => ({ ...state, setState }), [state]);
 

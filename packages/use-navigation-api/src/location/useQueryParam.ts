@@ -1,9 +1,9 @@
 import { useLocation } from "src/location/useLocation.ts";
 import { useMemo } from "react";
-import URI from "uri-js";
+import URI from "urijs";
 
-export function parseSearchParams(location?: string) {
-  return new URLSearchParams(URI.parse(location || "").query);
+export function parseSearchParams(location?: string | URI) {
+  return new URLSearchParams(URI(location || "").search());
 }
 
 /**
@@ -19,7 +19,7 @@ export function useQueryParam(param: string, all: boolean = false) {
   const location = useLocation();
   return useMemo(() => {
     try {
-      const searchParams = parseSearchParams(location);
+      const searchParams = new URLSearchParams(location.search());
       return all ? searchParams.getAll(param) || [] : searchParams.get(param);
     } catch {
       return null;

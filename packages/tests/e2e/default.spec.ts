@@ -30,6 +30,14 @@ test("should display multiple query parameters using useQueryParam with all: tru
   await expect(paramElement).toHaveText("1,2");
 });
 
+test("should display path and hash using usePath and useHash", async ({
+  page,
+}) => {
+  await page.goto("/default?test=value#section");
+  await expect(page.locator("#location-path")).toHaveText("/default");
+  await expect(page.locator("#location-hash")).toHaveText("#section");
+});
+
 test("should return null for missing query parameter", async ({ page }) => {
   await page.goto("/default");
   const paramElement = page.locator("#query-param-missing");

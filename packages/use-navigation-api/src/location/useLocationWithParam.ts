@@ -12,10 +12,7 @@ export function useLocationWithParam(
   base?: string,
 ) {
   return useLocation(
-    (url) =>
-      value === null
-        ? url.searchParams.delete(param)
-        : url.searchParams.set(param, value),
+    (url) => (value ? url.setQuery(param, value) : url.removeQuery(param)),
     base,
   );
 }
@@ -30,16 +27,6 @@ export function useLocationWithParams(
   base?: string,
 ) {
   return useLocation((url) => {
-    for (const [param, value] of Object.entries(params)) {
-      if (value === null) {
-        url.searchParams.delete(param);
-      } else if (Array.isArray(value)) {
-        url.searchParams.delete(param);
-        value.forEach((v) => url.searchParams.append(param, v));
-      } else {
-        url.searchParams.set(param, value);
-      }
-    }
-    return url;
+    return url.setSearch(params);
   }, base);
 }

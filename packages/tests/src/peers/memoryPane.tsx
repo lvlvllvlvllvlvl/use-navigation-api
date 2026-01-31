@@ -13,7 +13,7 @@ export function MemoryPane({ title, linkId, urlId, href }: MemoryPaneProps) {
     <section>
       <h2>{title}</h2>
       <p>
-        URL: <code id={urlId}>{url}</code>
+        URL: <code id={urlId}>{String(url)}</code>
       </p>
       <nav>
         <a href={href} id={linkId}>

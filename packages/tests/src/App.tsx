@@ -10,13 +10,15 @@ function App() {
   const navigation = useNavigate();
   const testParam = useQueryParam("test");
   const multiParam = useQueryParam("multi", true);
+  const path = url.path();
+  const hash = url.hash();
   const locationWithTestParam = useLocationWithParam("test", "override");
   const locationWithoutTestParam = useLocationWithParam("test", null);
 
   return (
     <>
       <p>
-        URL: <code id="navigation-url">{url}</code>
+        URL: <code id="navigation-url">{String(url)}</code>
       </p>
       <p>
         Test Param: <code id="query-param-test">{testParam}</code>
@@ -32,12 +34,22 @@ function App() {
         <code id="query-param-missing">{String(useQueryParam("missing"))}</code>
       </p>
       <p>
+        Path: <code id="location-path">{path}</code>
+      </p>
+      <p>
+        Hash: <code id="location-hash">{hash}</code>
+      </p>
+      <p>
         With Param:{" "}
-        <code id="location-with-test-param">{locationWithTestParam}</code>
+        <code id="location-with-test-param">
+          {String(locationWithTestParam)}
+        </code>
       </p>
       <p>
         Without Param:{" "}
-        <code id="location-without-test-param">{locationWithoutTestParam}</code>
+        <code id="location-without-test-param">
+          {String(locationWithoutTestParam)}
+        </code>
       </p>
       <div>
         <button

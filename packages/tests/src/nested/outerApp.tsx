@@ -7,7 +7,7 @@ export function OuterApp() {
     <div>
       <h2>Outer (URL)</h2>
       <p>
-        Outer URL: <code id="outer-url">{url}</code>
+        Outer URL: <code id="outer-url">{String(url)}</code>
       </p>
       <nav>
         <a href="/outer-path" id="link-outer">

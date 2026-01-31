@@ -34,9 +34,6 @@
     "build": "tsc -b && vite build",
     "lint": "eslint ."
   },
-  "dependencies": {
-    "uri-js": "^4.4.1"
-  },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
     "react-dom": "^18.0.0 || ^19.0.0"
@@ -60,5 +57,9 @@
   },
   "overrides": {
     "vite": "npm:rolldown-vite@7.2.5"
+  },
+  "dependencies": {
+    "@types/urijs": "^1.19.26",
+    "urijs": "^1.19.11"
   }
 }

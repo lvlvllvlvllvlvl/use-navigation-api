@@ -1,7 +1,7 @@
 import { useContext, useMemo } from "react";
 import { NavigationContext } from "src/navigationProvider";
 import { future } from "src/util/future";
-import URI from "uri-js";
+import URI from "urijs";
 
 export function useNavigate() {
   const { setState } = useContext(NavigationContext);
@@ -21,7 +21,7 @@ export function useNavigate() {
         Promise.resolve().then(() => {
           try {
             handle(
-              navigation.navigate(URI.resolve(state.url, destination), options),
+              navigation.navigate(String(URI(destination, state.url)), options),
             );
           } catch {
             handle(navigation.navigate(destination, options));

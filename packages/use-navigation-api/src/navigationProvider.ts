@@ -9,7 +9,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import URI from "uri-js";
+import URI from "urijs";
 
 export type NavigationContextState = {
   url: string;
@@ -41,10 +41,13 @@ export const NavigationProvider: FC<{
   shouldHandle = defaultShouldHandle,
 }) => {
   const [scope, setScope] = useState<HTMLDivElement | null>(null);
-  const [state, setState] = useState(() => ({
-    store,
-    url: window.location.href,
-  }));
+  const [state, setState] = useState(() => {
+    const url = new URL(window.location.href);
+    return {
+      store,
+      url: url.pathname + url.search + url.hash,
+    };
+  });
   const skip = useMemo(
     () => (event: NavigateEvent) => {
       const target = event.sourceElement;
@@ -59,19 +62,20 @@ export const NavigationProvider: FC<{
       if (skip(event)) {
         return;
       }
+      const { pathname, search, hash } = new URL(event.destination.url);
+      let url = pathname + search + hash;
 
-      let url = event.destination.url;
       if (store === "memory") {
         event.preventDefault();
 
         setState((prev) => {
           if (
-            event.sourceElement instanceof HTMLAnchorElement &&
+            event.sourceElement?.hasAttribute("href") &&
             event.navigationType === "push"
           ) {
             const href = event.sourceElement.getAttribute("href");
             if (href && !href.startsWith("/") && !/^[a-z]+:\/\//i.test(href)) {
-              url = URI.resolve(prev.url, href);
+              url = String(URI(href, prev.url));
             }
           }
           return { ...prev, url, store };

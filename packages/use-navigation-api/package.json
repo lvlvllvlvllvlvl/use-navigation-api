@@ -19,8 +19,15 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/use-navigation-api.es.js",
       "require": "./dist/use-navigation-api.umd.js"
-    }
+    },
+    "./src": "./src/index.ts",
+    "./src/*": "./src/*"
   },
+  "files": [
+    "dist",
+    "src",
+    "README.md"
+  ],
   "version": "0.1.0",
   "type": "module",
   "scripts": {

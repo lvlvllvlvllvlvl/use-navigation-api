@@ -1,4 +1,4 @@
-name: release.yml
+name: Release Me
 
 on:
   workflow_dispatch:
@@ -44,8 +44,7 @@ jobs:
         run: npm version "${{ inputs.bump }}" --workspace use-navigation-api
 
       - name: Publish to npm
-        run: npm publish --provenance
-        working-directory: packages/use-navigation-api
+        run: npm publish --workspace use-navigation-api --provenance
 
       - name: Commit and tag release
         run: |

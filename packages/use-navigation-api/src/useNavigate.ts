@@ -1,6 +1,7 @@
 import { useContext, useMemo } from "react";
 import { NavigationContext } from "src/navigationProvider";
 import { future } from "src/util/future";
+import URI from "uri-js";
 
 export function useNavigate() {
   const { navigation, setState } = useContext(NavigationContext);
@@ -20,10 +21,7 @@ export function useNavigate() {
         Promise.resolve().then(() => {
           try {
             handle(
-              navigation.navigate(
-                new URL(destination, state.url).href,
-                options,
-              ),
+              navigation.navigate(URI.resolve(state.url, destination), options),
             );
           } catch {
             handle(navigation.navigate(destination, options));

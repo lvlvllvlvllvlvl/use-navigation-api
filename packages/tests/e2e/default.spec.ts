@@ -1,4 +1,5 @@
 import { test, expect } from "./fixtures";
+import { parseSearchParams } from "use-navigation-api";
 
 test("should load the app without errors", async ({ page }) => {
   await page.goto("/default");
@@ -43,9 +44,9 @@ test("should update the location when useLocationWithParam sets a value", async 
     .locator("#location-with-test-param")
     .textContent();
   expect(locationText).not.toBeNull();
-  const parsed = new URL(locationText!);
-  expect(parsed.searchParams.get("test")).toBe("override");
-  expect(parsed.searchParams.get("other")).toBe("1");
+  const parsed = parseSearchParams(locationText);
+  expect(parsed.get("test")).toBe("override");
+  expect(parsed.get("other")).toBe("1");
 });
 
 test("should update the location when useLocationWithParam removes a value", async ({
@@ -56,9 +57,9 @@ test("should update the location when useLocationWithParam removes a value", asy
     .locator("#location-without-test-param")
     .textContent();
   expect(locationText).not.toBeNull();
-  const parsed = new URL(locationText!);
-  expect(parsed.searchParams.get("test")).toBeNull();
-  expect(parsed.searchParams.get("other")).toBe("1");
+  const parsed = parseSearchParams(locationText!);
+  expect(parsed.get("test")).toBeNull();
+  expect(parsed.get("other")).toBe("1");
 });
 
 test("should handle relative links correctly", async ({ page }) => {

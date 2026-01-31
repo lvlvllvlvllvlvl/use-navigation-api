@@ -9,6 +9,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import URI from "uri-js";
 
 export type NavigationContextState = {
   navigation: Navigation;
@@ -70,7 +71,7 @@ export const NavigationProvider: FC<{
           ) {
             const href = event.sourceElement.getAttribute("href");
             if (href && !href.startsWith("/") && !/^[a-z]+:\/\//i.test(href)) {
-              url = new URL(href, prev.url).href;
+              url = URI.resolve(prev.url, href);
             }
           }
           return { ...prev, url, store };

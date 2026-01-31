@@ -6,7 +6,7 @@ import {
 } from "use-navigation-api";
 
 function App() {
-  const { url } = useLocation();
+  const url = useLocation();
   const navigation = useNavigate();
   const testParam = useQueryParam("test");
   const multiParam = useQueryParam("multi", true);
@@ -16,7 +16,7 @@ function App() {
   return (
     <>
       <p>
-        URL: <code id="navigation-url">{url?.href}</code>
+        URL: <code id="navigation-url">{url}</code>
       </p>
       <p>
         Test Param: <code id="query-param-test">{testParam}</code>
@@ -33,15 +33,11 @@ function App() {
       </p>
       <p>
         With Param:{" "}
-        <code id="location-with-test-param">
-          {locationWithTestParam.url?.href}
-        </code>
+        <code id="location-with-test-param">{locationWithTestParam}</code>
       </p>
       <p>
         Without Param:{" "}
-        <code id="location-without-test-param">
-          {locationWithoutTestParam.url?.href}
-        </code>
+        <code id="location-without-test-param">{locationWithoutTestParam}</code>
       </p>
       <div>
         <button

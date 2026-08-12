@@ -15,7 +15,7 @@
     "test": "playwright test"
   },
   "dependencies": {
-    "@lvlvllvlvllvlvl/use-navigation-api": "workspace:*"
+    "use-navigation-api": ">=0.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",

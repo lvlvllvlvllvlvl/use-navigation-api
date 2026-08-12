@@ -14,6 +14,7 @@ on:
 
 permissions:
   contents: write
+  packages: write
   id-token: write
 
 jobs:
@@ -22,6 +23,7 @@ jobs:
     environment: release
     permissions:
       contents: write
+      packages: write
       id-token: write
     steps:
       - name: Checkout
@@ -33,18 +35,22 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 25
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@lvlvllvlvllvlvl'
 
       - name: Install dependencies
         run: npm ci
 
       - name: Build
-        run: npm run build --workspace use-navigation-api
+        run: npm run build --workspace @lvlvllvlvllvlvl/use-navigation-api
 
       - name: Bump package version
-        run: npm version "${{ inputs.bump }}" --workspace use-navigation-api
+        run: npm version "${{ inputs.bump }}" --workspace @lvlvllvlvllvlvl/use-navigation-api
 
-      - name: Publish to npm
-        run: npm publish --workspace use-navigation-api --provenance
+      - name: Publish to GitHub Packages
+        run: npm publish --workspace @lvlvllvlvllvlvl/use-navigation-api
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Commit and tag release
         run: |
